@@ -10,6 +10,7 @@ library(reshape2)
 ###################################################################
 #ompA
 ompA_trees<-read.nexus(file="One_outgroup/ompA1out1.nex")
+#View(ompA_trees)
 ompA_treelength<-numeric()
 for (i in 1:length(ompA_trees)){
   ompA_treelength[i]<-sum(ompA_trees[[i]]$edge.length)
@@ -81,3 +82,5 @@ C
 
 plot(densityCP)
 polygon(densityompA, col="green", border="black")
+
+t.test(ompA, CP, paired=TRUE, conf.level=0.98)
