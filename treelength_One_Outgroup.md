@@ -1,7 +1,7 @@
 treelength\_One\_Outgroup.R
 ================
 Amy
-Mon Apr 8 19:01:50 2019
+Thu Apr 11 17:43:33 2019
 
 ``` r
 library(ape)
@@ -16,13 +16,14 @@ library(reshape2)
 
 ###################################################################
 #ompA
-ompA_trees<-read.nexus(file="One_outgroup/ompA1out1.nex")
+ompA_trees<-read.nexus(file="One_outgroup/ompA.nex.run1.t")
+#View(ompA_trees)
 ompA_treelength<-numeric()
 for (i in 1:length(ompA_trees)){
   ompA_treelength[i]<-sum(ompA_trees[[i]]$edge.length)
 }
 
-ompA_trees2<-read.nexus(file="One_outgroup/ompA1out2.nex")
+ompA_trees2<-read.nexus(file="One_outgroup/ompA.nex.run2.t")
 ompA_treelength2<-numeric()
 for (i in 1:length(ompA_trees2)){
   ompA_treelength2[i]<-sum(ompA_trees2[[i]]$edge.length)
@@ -31,13 +32,13 @@ for (i in 1:length(ompA_trees2)){
 mean(ompA_treelength2)
 ```
 
-    ## [1] 1.0041
+    ## [1] 0.9387349
 
 ``` r
 mean(ompA_treelength)
 ```
 
-    ## [1] 1.0055
+    ## [1] 0.9408079
 
 ``` r
 #Concatenate lengths from the two runs
@@ -46,13 +47,13 @@ ompA<-c(ompA_treelength,ompA_treelength2)
 
 ###################################################################
 #CP
-CP_trees<-read.nexus(file="One_outgroup/CP_trees1.nex")
+CP_trees<-read.nexus(file="One_outgroup/CP_MAFFT.nex.run1.t")
 CP_treelength<-numeric()
 for (i in 1:length(CP_trees)){
   CP_treelength[i]<-sum(CP_trees[[i]]$edge.length)
 }
 
-CP_trees2<-read.nexus(file="One_outgroup/CP_trees2.nex")
+CP_trees2<-read.nexus(file="One_outgroup/CP_MAFFT.nex.run2.t")
 CP_treelength2<-numeric()
 for (i in 1:length(CP_trees2)){
   CP_treelength2[i]<-sum(CP_trees2[[i]]$edge.length)
@@ -61,13 +62,13 @@ for (i in 1:length(CP_trees2)){
 mean(CP_treelength2)
 ```
 
-    ## [1] 1.695029
+    ## [1] 0.2717347
 
 ``` r
 mean(CP_treelength)
 ```
 
-    ## [1] 1.687781
+    ## [1] 0.2724249
 
 ``` r
 # Concatenate lengths from the two runs
@@ -81,13 +82,13 @@ Rates<-data.frame(ompA, CP)
 head(Rates)
 ```
 
-    ##       ompA       CP
-    ## 1 1.620000 1.656377
-    ## 2 4.324336 1.655845
-    ## 3 2.402805 1.557088
-    ## 4 2.299343 1.625642
-    ## 5 1.927038 1.600637
-    ## 6 1.288854 1.639293
+    ##       ompA        CP
+    ## 1 1.620000 1.6200000
+    ## 2 2.774153 0.3320822
+    ## 3 2.930003 0.5716360
+    ## 4 1.802383 0.3057139
+    ## 5 2.168095 0.2096357
+    ## 6 1.079065 0.2285718
 
 ``` r
 data<-melt(Rates)
@@ -101,19 +102,21 @@ head(data)
 
     ##   variable    value
     ## 1     ompA 1.620000
-    ## 2     ompA 4.324336
-    ## 3     ompA 2.402805
-    ## 4     ompA 2.299343
-    ## 5     ompA 1.927038
-    ## 6     ompA 1.288854
+    ## 2     ompA 2.774153
+    ## 3     ompA 2.930003
+    ## 4     ompA 1.802383
+    ## 5     ompA 2.168095
+    ## 6     ompA 1.079065
 
 ``` r
 ggplot(data,aes(x=value, fill=variable)) + 
   geom_density(alpha=0.25) +
-  xlim(0.5,2.5)
+  xlab("Substitutions Per Site")+
+  ylab("Density of Trees")+
+  xlim(0,1.5)
 ```
 
-    ## Warning: Removed 4 rows containing non-finite values (stat_density).
+    ## Warning: Removed 12 rows containing non-finite values (stat_density).
 
 ![](treelength_One_Outgroup_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
@@ -127,13 +130,13 @@ hist(CP)
 mean(CP,na.rm=TRUE)
 ```
 
-    ## [1] 1.691405
+    ## [1] 0.2720798
 
 ``` r
 mean(ompA)
 ```
 
-    ## [1] 1.0048
+    ## [1] 0.9397714
 
 ``` r
 hist(ompA)
@@ -150,7 +153,7 @@ C <- sum(yy) * dx  ## sum(yy * dx)
 C
 ```
 
-    ## [1] 1.000978
+    ## [1] 1.015654
 
 ``` r
 densityompA<-density(ompA)
@@ -161,7 +164,7 @@ C <- sum(yy) * dx  ## sum(yy * dx)
 C
 ```
 
-    ## [1] 1.000827
+    ## [1] 1.001113
 
 ``` r
 plot(densityCP)
@@ -169,3 +172,19 @@ polygon(densityompA, col="green", border="black")
 ```
 
 ![](treelength_One_Outgroup_files/figure-gfm/unnamed-chunk-1-4.png)<!-- -->
+
+``` r
+t.test(ompA, CP, paired=TRUE, conf.level=0.98)
+```
+
+    ## 
+    ##  Paired t-test
+    ## 
+    ## data:  ompA and CP
+    ## t = 1408.7, df = 20001, p-value < 2.2e-16
+    ## alternative hypothesis: true difference in means is not equal to 0
+    ## 98 percent confidence interval:
+    ##  0.6665889 0.6687943
+    ## sample estimates:
+    ## mean of the differences 
+    ##               0.6676916

@@ -9,14 +9,14 @@ library(reshape2)
 
 ###################################################################
 #ompA
-ompA_trees<-read.nexus(file="One_outgroup/ompA1out1.nex")
+ompA_trees<-read.nexus(file="One_outgroup/ompA.nex.run1.t")
 #View(ompA_trees)
 ompA_treelength<-numeric()
 for (i in 1:length(ompA_trees)){
   ompA_treelength[i]<-sum(ompA_trees[[i]]$edge.length)
 }
 
-ompA_trees2<-read.nexus(file="One_outgroup/ompA1out2.nex")
+ompA_trees2<-read.nexus(file="One_outgroup/ompA.nex.run2.t")
 ompA_treelength2<-numeric()
 for (i in 1:length(ompA_trees2)){
   ompA_treelength2[i]<-sum(ompA_trees2[[i]]$edge.length)
@@ -31,13 +31,13 @@ ompA<-c(ompA_treelength,ompA_treelength2)
 
 ###################################################################
 #CP
-CP_trees<-read.nexus(file="One_outgroup/CP_trees1.nex")
+CP_trees<-read.nexus(file="One_outgroup/CP_MAFFT.nex.run1.t")
 CP_treelength<-numeric()
 for (i in 1:length(CP_trees)){
   CP_treelength[i]<-sum(CP_trees[[i]]$edge.length)
 }
 
-CP_trees2<-read.nexus(file="One_outgroup/CP_trees2.nex")
+CP_trees2<-read.nexus(file="One_outgroup/CP_MAFFT.nex.run2.t")
 CP_treelength2<-numeric()
 for (i in 1:length(CP_trees2)){
   CP_treelength2[i]<-sum(CP_trees2[[i]]$edge.length)
@@ -59,7 +59,9 @@ data<-melt(Rates)
 head(data)
 ggplot(data,aes(x=value, fill=variable)) + 
   geom_density(alpha=0.25) +
-  xlim(0.5,2.5)
+  xlab("Substitutions Per Site")+
+  ylab("Density of Trees")+
+  xlim(0,1.5)
 
 hist(CP)
 mean(CP,na.rm=TRUE)
